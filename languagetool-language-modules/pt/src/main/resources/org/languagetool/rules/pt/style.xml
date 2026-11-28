@@ -17862,28 +17862,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
             <!--IDEA shorten_it-->
             <!-- ChatGPT 6 and new disambiguator for 2026+ -->
 
-            <!-- Preserve coordinated and complex subordinate clauses. -->
+            <!-- Preserve coordinated subordinate clauses. -->
             <antipattern>
                 <token>que</token>
                 <token regexp='yes' skip='12'>é|são
-                    <exception scope='next' regexp='yes'>[.!?;,:]</exception>
+                    <exception scope='next' regexp='yes'>[.!?;:]</exception>
                 </token>
-                <token regexp='yes'>e|ou|mas|nem|que</token>
+                <token regexp='yes'>e|ou|mas|nem</token>
+                <token>que</token>
+                <example>Penso que é necessário comprar pão e que é preciso sair.</example>
                 <example>Considero que é importante e que deve ser preservado.</example>
-                <example>Considero que é inteligente e trabalha muito.</example>
-                <example>Considero que são inteligentes e não precisam de ajuda.</example>
                 <example>Considero que são necessários e que devem permanecer aqui.</example>
-                <example>Considero que são os alunos que devem decidir.</example>
-                <example>Penso que é o João que tem razão.</example>
             </antipattern>
 
-            <!-- Preserve expressions of time. -->
+            <!-- Preserve coordinated finite predicates. -->
+            <!-- Do not confuse ambiguous nouns, adjectives or infinitives with finite verbs. -->
+            <antipattern>
+                <token>que</token>
+                <token regexp='yes' skip='12'>é|são
+                    <exception scope='next' regexp='yes'>[.!?;:]</exception>
+                </token>
+                <token regexp='yes'>e|ou|mas|nem</token>
+                <token min='0' max='2' postag='RG|RN' postag_regexp='yes'/>
+                <token postag='VMI.+|VMS.+' postag_regexp='yes'>
+                    <exception postag='NC.+|NP.+|AQ.+|VMN.+' postag_regexp='yes'/>
+                </token>
+                <example>Considero que é inteligente e trabalha muito.</example>
+                <example>Considero que são inteligentes e não precisam de ajuda.</example>
+                <example>Penso que é necessário comprar pão e depois devo sair.</example>
+                <example>Penso que é necessário comprar pão e não tenho dinheiro.</example>
+            </antipattern>
+
+            <!-- Preserve expressions of time, including determiners. -->
             <antipattern>
                 <token>que</token>
                 <token regexp='yes'>é|são</token>
+                <token min='0' max='1' postag='D[AIP].+' postag_regexp='yes'/>
                 <token min='0' max='1' postag='Z.+' postag_regexp='yes'/>
-                <token regexp='yes'>&expressoes_de_tempo;</token>
+                <token regexp='yes'>momentos?|horas?|&expressoes_de_tempo;</token>
                 <example>Penso que são nove horas da noite.</example>
+                <example>Penso que é o momento de partir.</example>
+                <example>Penso que é a hora de sair.</example>
             </antipattern>
 
             <!-- Preserve religious proper names. -->
@@ -17894,59 +17913,103 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
                 <example>Penso que São Patrício utilizou esse símbolo.</example>
             </antipattern>
 
-            <!-- VERB + QUE É → ser -->
+            <!-- Preserve cleft constructions. -->
+            <antipattern>
+                <token>que</token>
+                <token regexp='yes'>é|são</token>
+                <token postag='DA.+' postag_regexp='yes'/>
+                <token postag='NC.+|NP.+' postag_regexp='yes'/>
+                <token>que</token>
+                <example>Penso que é o João que tem razão.</example>
+                <example>Considero que são os alunos que devem decidir.</example>
+            </antipattern>
+
+            <!-- Impersonal construction: QUE É + adjective + infinitive → ser -->
             <rule>
                 <pattern>
-                    <token inflected='yes' regexp='yes' postag='VMI.+|VMS.+' postag_regexp='yes'>considerar|julgar|crer|pensar|presumir|supor|entender|achar|detetar|detectar</token>
+                    <token inflected='yes' regexp='yes' postag='VMI.+|VMS.+' postag_regexp='yes'>considerar|julgar|crer|pensar|presumir|supor|entender|achar</token>
                     <marker>
                         <token>que</token>
                         <token postag='VMIP3S0'>é</token>
                     </marker>
                     <token min='0' max='1' postag='RG'/>
-                    <token min='0' max='1' postag='D[AIP].+' postag_regexp='yes'/>
-                    <token postag='NC.+|AQ.+' postag_regexp='yes'>
-                        <exception regexp='yes'>horas?</exception>
-                        <exception postag='VMP.+|NP.+' postag_regexp='yes'/>
-                    </token>
+                    <token regexp='yes'>necessário|preciso|importante|fundamental|essencial|indispensável|possível|impossível|difícil|fácil|perigoso|preferível|obrigatório|conveniente|inconveniente|aconselhável|recomendável|melhor|pior</token>
+                    <token postag='VMN0000'/>
                 </pattern>
                 <message>&simplify_msg;</message>
                 <suggestion>ser</suggestion>
-                <example correction="ser">Mas depende sempre daquilo que consideras <marker>que é</marker> o problema.</example>
                 <example correction="ser">Eu acho <marker>que é</marker> perigoso subir aquela montanha sozinho.</example>
                 <example correction="ser">Considero <marker>que é</marker> necessário melhorar o programa.</example>
-                <example correction="ser">Penso <marker>que é</marker> uma excelente ideia.</example>
-                <example correction="ser">Julgo <marker>que é</marker> muito importante.</example>
+                <example correction="ser">Eu penso <marker>que é</marker> necessário comprar pão e leite.</example>
+                <example correction="ser">Julgo <marker>que é</marker> muito importante preservar estes documentos.</example>
+                <example correction="ser">Penso <marker>que é</marker> preferível viajar de manhã.</example>
+                <example correction="ser">Considero <marker>que é</marker> difícil aprender português.</example>
+                <example correction="ser">Penso <marker>que é</marker> importante ler e escrever.</example>
+                <example>Não sei qual é a profissão da Ana. Eu acho que é médica.</example>
+                <example>Penso que é médica.</example>
+                <example>Penso que é inteligente.</example>
                 <example>Considero que é importante e que deve ser preservado.</example>
                 <example>Considero que é inteligente e trabalha muito.</example>
+                <example>Penso que é necessário comprar pão e que é preciso sair.</example>
+                <example>Penso que é necessário comprar pão e depois devo sair.</example>
+                <example>Penso que é necessário comprar pão e não tenho dinheiro.</example>
+                <example>Penso que é uma excelente ideia.</example>
+                <example>Penso que é o momento de partir.</example>
+                <example>Penso que é a hora de sair.</example>
+                <example>Penso que é o João que tem razão.</example>
+                <example>Mas depende sempre daquilo que consideras que é o problema.</example>
                 <example>Ela já falou que é ministra.</example>
                 <example>Agora faço o que mais gosto, que é usar o meu conhecimento.</example>
                 <example>Sem contar que é o mais vendido.</example>
                 <example>Se me garantir que é publicado este ano letivo.</example>
-                <example>Diria que é o mais vendido.</example>
-                <example>Penso que é o João que tem razão.</example>
             </rule>
 
-            <!-- VERB + QUE SÃO → serem -->
+            <!-- Impersonal nominal construction followed by an infinitive. -->
+            <!-- QUE É UMA [adjective] IDEIA + infinitive → ser -->
             <rule>
                 <pattern>
-                    <token inflected='yes' regexp='yes' postag='VMI.+|VMS.+' postag_regexp='yes'>considerar|julgar|crer|pensar|presumir|supor|entender|achar|detetar|detectar</token>
+                    <token inflected='yes' regexp='yes' postag='VMI.+|VMS.+' postag_regexp='yes'>considerar|julgar|crer|pensar|presumir|supor|entender|achar</token>
+                    <marker>
+                        <token>que</token>
+                        <token postag='VMIP3S0'>é</token>
+                    </marker>
+                    <token>uma</token>
+                    <token min='0' max='1' regexp='yes'>boa|má|excelente|ótima|óptima|péssima</token>
+                    <token>ideia</token>
+                    <token postag='VMN0000'/>
+                </pattern>
+                <message>&simplify_msg;</message>
+                <suggestion>ser</suggestion>
+                <example correction="ser">Penso <marker>que é</marker> uma excelente ideia rever o programa.</example>
+                <example correction="ser">Acho <marker>que é</marker> uma boa ideia comprar pão e leite.</example>
+                <example correction="ser">Considero <marker>que é</marker> uma má ideia abandonar o projeto.</example>
+                <example correction="ser">Penso <marker>que é</marker> uma boa ideia ler e escrever.</example>
+                <example>Penso que é uma excelente ideia.</example>
+                <example>Acho que é uma boa ideia.</example>
+                <example>Considero que é uma excelente investigadora.</example>
+                <example>Penso que é uma boa ideia comprar pão e que devemos sair cedo.</example>
+                <example>Acho que é uma boa ideia comprar pão e não tenho dinheiro.</example>
+            </rule>
+
+            <!-- Explicit postposed plural subject. -->
+            <!-- QUE SÃO + adjective + mais + plural noun → serem -->
+            <rule>
+                <pattern>
+                    <token inflected='yes' regexp='yes' postag='VMI.+|VMS.+' postag_regexp='yes'>considerar|julgar|crer|pensar|presumir|supor|entender|achar</token>
                     <marker>
                         <token>que</token>
                         <token case_sensitive='yes' postag='VMIP3P0'>são</token>
                     </marker>
-                    <token min='0' max='1' postag='RG'/>
-                    <token min='0' max='1' postag='D[AIP].+' postag_regexp='yes'/>
-                    <token postag='NC.+|AQ.+' postag_regexp='yes'>
-                        <exception regexp='yes'>horas?</exception>
-                        <exception postag='VMP.+|NP.+' postag_regexp='yes'/>
-                    </token>
+                    <token regexp='yes'>necessári[oa]s|precis[oa]s|indispensáveis|essenciais|fundamentais</token>
+                    <token>mais</token>
+                    <token postag='NC.P.+' postag_regexp='yes'/>
+                    <token regexp='yes'>[.!?]</token>
                 </pattern>
                 <message>&simplify_msg;</message>
                 <suggestion>serem</suggestion>
-                <example correction="serem">Mas depende sempre daquilo que consideras <marker>que são</marker> os problemas.</example>
-                <example correction="serem">Para que o cérebro humano não detete <marker>que são</marker> simples imagens isoladas.</example>
                 <example correction="serem">Considero <marker>que são</marker> necessários mais recursos.</example>
-                <example correction="serem">Julgo <marker>que são</marker> excelentes investigadores.</example>
+                <example correction="serem">Penso <marker>que são</marker> indispensáveis mais medidas.</example>
+                <example correction="serem">Julgo <marker>que são</marker> necessários mais investimentos.</example>
                 <example>Considero que são inteligentes e não precisam de ajuda.</example>
                 <example>Considero que são necessários e que devem permanecer aqui.</example>
                 <example>Penso que são nove horas da noite.</example>
@@ -17954,6 +18017,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
                 <example>Há muitos clientes que temos que são estudantes.</example>
                 <example>Diria que são os mais vendidos.</example>
                 <example>Considero que são os alunos que devem decidir.</example>
+                <example>Mas depende sempre daquilo que consideras que são os problemas.</example>
+                <example>Para que o cérebro humano não detete que são simples imagens isoladas.</example>
+                <example>Julgo que são excelentes investigadores.</example>
             </rule>
 
             <!-- Copular sentence with explanatory relative clause (singular). -->
