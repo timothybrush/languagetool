@@ -17858,254 +17858,161 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
         </rule>
 
 
-        <!-- VERB + QUE + É/SÃO verb + ser(em) -->
-        <rulegroup id='VERB_QUE_É_VERB_SER' name="✂️ Que é/são → ser(em)" type='style' tags='picky'>
+        <rulegroup id='VERB_QUE_É_VERB_SER' name="✂️ Simplificação de «que é/são» → ser/serem/sendo" type='style' tags='picky'>
             <!--IDEA shorten_it-->
-            <!--      Created by Marco A.G.Pinto, Portuguese rule 2021-01-14 + 2021-07-06 (Enhanced) (1-JAN-2021+)      -->
-            <!--
-      Eu acho que é perigoso subir aquela montanha sozinho. → Eu acho ser perigoso subir aquela montanha sozinho.
-      -->
+            <!-- ChatGPT 6 and new disambiguator for 2026+ -->
 
+            <!-- Preserve coordinated and complex subordinate clauses. -->
             <antipattern>
-                <token postag='V.+' postag_regexp='yes'/>
-                <token postag='_PUNCT_COMMA'/>
                 <token>que</token>
-                <token inflected='yes'>ser</token>
-                <token postag='[DP].+' postag_regexp='yes'/>
-                <token min='1' max='2' postag='NC.+|AQ.+' postag_regexp='yes'/>
-                <token postag='_PUNCT_COMMA'/>
-                <example>A leitura flui, que é uma beleza, sem entraves e sem dor.</example>
-                <example>Lá no museu que ele fez, que é muito bonito, ele deixou a coisa árida.</example>
+                <token regexp='yes' skip='12'>é|são
+                    <exception scope='next' regexp='yes'>[.!?;,:]</exception>
+                </token>
+                <token regexp='yes'>e|ou|mas|nem|que</token>
+                <example>Considero que é importante e que deve ser preservado.</example>
+                <example>Considero que é inteligente e trabalha muito.</example>
+                <example>Considero que são inteligentes e não precisam de ajuda.</example>
+                <example>Considero que são necessários e que devem permanecer aqui.</example>
+                <example>Considero que são os alunos que devem decidir.</example>
+                <example>Penso que é o João que tem razão.</example>
             </antipattern>
 
+            <!-- Preserve expressions of time. -->
             <antipattern>
-                <token postag='VMSF.+' postag_regexp='yes'/>
-                <token>que</token>
-                <token inflected='yes'>ser</token>
-                <token postag='VMP00.+' postag_regexp='yes'><exception postag_regexp='yes' postag='AQ.+'/></token>
-                <example>Se me garantir que é publicado este ano letivo.</example>
-            </antipattern>
-
-            <antipattern>
-                <token postag='SPS00:DA.+' postag_regexp='yes'/>
-                <token skip='4' postag='DP.+' postag_regexp='yes'/>
                 <token>que</token>
                 <token regexp='yes'>é|são</token>
-                <token postag='DI.+' postag_regexp='yes'/>
-                <example>Ele alega no seu perfil no X, que é um alienígena viajante do tempo.</example>
-                <example>Eles alegam no seu perfil no X, que são uns alienígenas viajantes do tempo.</example>
+                <token min='0' max='1' postag='Z.+' postag_regexp='yes'/>
+                <token regexp='yes'>&expressoes_de_tempo;</token>
+                <example>Penso que são nove horas da noite.</example>
             </antipattern>
+
+            <!-- Preserve religious proper names. -->
             <antipattern>
                 <token>que</token>
-                <token>é</token>
-                <token postag='VMSF3.+|VMN0000' postag_regexp='yes'/>
-                <example>Agora faço o que mais gosto, que é usar o meu conhecimento nos projetos open-source.</example>
-                <example>Desse critério tão subjetivo (e maluco) que é classificar filmes.</example>
-                <example>Desse critério tão subjetivo (e maluco) que é classificar filmes.</example>
-                <example>Além disso, tenho uma outra sugestão, que é trocar o suco de limão por vinagre (maçã ou de vinho tinto).</example>
-                <example>Apenas continuam o que já fazem normalmente, que é botar ovos.</example>
-                <example>Não estou de marcação com ninguém. Apenas cumpro o meu trabalho, que é supervisioná-los.</example>
+                <token case_sensitive='yes'>São</token>
+                <token postag='NP.+' postag_regexp='yes'/>
+                <example>Penso que São Patrício utilizou esse símbolo.</example>
             </antipattern>
-            <antipattern>
-                <token>sem</token>
-                <token>contar</token>
-                <token>que</token>
-                <token inflected='yes'>ser</token>
-                <example>Sem contar que é o mais vendido.</example>
-            </antipattern>
-            <antipattern>
-                <token>a</token>
-                <token>seguir</token>
-                <token>que</token>
-                <token inflected='yes'>ser</token>
-                <example>Há também o valor a seguir que é sim o mais aceito.</example>
-            </antipattern>
-            <antipattern>
-                <token>já</token>
-                <token postag='V.+' postag_regexp='yes'/>
-                <token>que</token>
-                <token inflected='yes'>ser</token>
-                <example>Ela já falou que é ministra.</example>
-            </antipattern>
-            <antipattern>
-                <token>vale</token>
-                <token postag='VMN0000'/>
-                <token>que</token>
-                <token inflected='yes'>ser</token>
-                <example>Vale lembrar que ele ainda tinha uma ficha.</example>
-            </antipattern>
-            <antipattern>
-                <token postag='SENT_START'/>
-                <token postag='VMG.+' postag_regexp='yes'/>
-                <token>que</token>
-                <token inflected='yes'>ser</token>
-                <example>Lembrando que sou adulto.</example>
-            </antipattern>
-            <antipattern>
-                <token postag_regexp='yes' postag='NC.+|AQ0.+|VMP.+'/>
-                <token>que</token>
-                <token postag='V.+' postag_regexp='yes'/>
-                <token>que</token>
-                <token inflected='yes'>ser</token>
-                <example>Há muitos clientes que temos que são estudantes.</example>
-            </antipattern>
-            <antipattern>
-                <token>diria</token>
-                <token>que</token>
-                <token inflected='yes'>ser</token>
-                <example>Diria que são os mais vendidos.</example>
-            </antipattern>
+
+            <!-- VERB + QUE É → ser -->
             <rule>
                 <pattern>
-                    <token negate_pos='yes' postag='VMN.+' postag_regexp='yes'/>
-                    <token postag='V.+' postag_regexp='yes'>
-                        <exception inflected='yes' regexp='yes'>ser|achar|saber|contar|aceitar|lembrar</exception>
-                        <exception postag_regexp='yes' postag='NC.+|AQ0.+|VMP.+|VMM.+|VMN.+'/>
-                    </token>
+                    <token inflected='yes' regexp='yes' postag='VMI.+|VMS.+' postag_regexp='yes'>considerar|julgar|crer|pensar|presumir|supor|entender|achar|detetar|detectar</token>
                     <marker>
                         <token>que</token>
-                        <token>é</token>
+                        <token postag='VMIP3S0'>é</token>
                     </marker>
-                    <token negate="yes" regexp='yes'>horas?|[\.,!\?]
-                        <exception postag='CS'/>
+                    <token min='0' max='1' postag='RG'/>
+                    <token min='0' max='1' postag='D[AIP].+' postag_regexp='yes'/>
+                    <token postag='NC.+|AQ.+' postag_regexp='yes'>
+                        <exception regexp='yes'>horas?</exception>
+                        <exception postag='VMP.+|NP.+' postag_regexp='yes'/>
                     </token>
                 </pattern>
                 <message>&simplify_msg;</message>
                 <suggestion>ser</suggestion>
                 <example correction="ser">Mas depende sempre daquilo que consideras <marker>que é</marker> o problema.</example>
+                <example correction="ser">Eu acho <marker>que é</marker> perigoso subir aquela montanha sozinho.</example>
+                <example correction="ser">Considero <marker>que é</marker> necessário melhorar o programa.</example>
+                <example correction="ser">Penso <marker>que é</marker> uma excelente ideia.</example>
+                <example correction="ser">Julgo <marker>que é</marker> muito importante.</example>
+                <example>Considero que é importante e que deve ser preservado.</example>
+                <example>Considero que é inteligente e trabalha muito.</example>
+                <example>Ela já falou que é ministra.</example>
+                <example>Agora faço o que mais gosto, que é usar o meu conhecimento.</example>
+                <example>Sem contar que é o mais vendido.</example>
+                <example>Se me garantir que é publicado este ano letivo.</example>
+                <example>Diria que é o mais vendido.</example>
+                <example>Penso que é o João que tem razão.</example>
             </rule>
 
-            <!--
-      Para que o cérebro humano não detete que são simples imagens isoladas. → Para que o cérebro humano não detete serem simples imagens isoladas.
-      -->
+            <!-- VERB + QUE SÃO → serem -->
             <rule>
-                <antipattern>
-                    <token>que</token>
-                    <token inflected='yes'>ser</token>
-                    <token postag='Z.+' postag_regexp='yes'/>
-                    <token regexp='yes'>&expressoes_de_tempo;</token>
-                    <example>Vejo que são nove horas da noite.</example>
-                </antipattern>
-                <!-- MARCOAGPINTO 2021-01-14 (1-JAN-2021+) *START* -->
-                <!--
-        É dito que São Patrício o utilizou para explicar a Santíssima Trindade.
-        -->
-                <antipattern>
-                    <token>que</token>
-                    <token case_sensitive="yes">São</token>
-                    <token postag='NP.+' postag_regexp='yes'/>
-                </antipattern>
-                <!-- MARCOAGPINTO 2021-01-14 (1-JAN-2021+) *END* -->
                 <pattern>
-                    <token postag='V.+' postag_regexp='yes'>
-                        <exception inflected='yes' regexp='yes'>ser|achar|saber|contar|aceitar</exception>
-                        <exception postag_regexp='yes' postag='NC.+|AQ0.+|VMP.+'/>
-                        <exception postag='VMN.+' postag_regexp='yes'/>
-                    </token>
+                    <token inflected='yes' regexp='yes' postag='VMI.+|VMS.+' postag_regexp='yes'>considerar|julgar|crer|pensar|presumir|supor|entender|achar|detetar|detectar</token>
                     <marker>
                         <token>que</token>
-                        <token>são</token>
+                        <token case_sensitive='yes' postag='VMIP3P0'>são</token>
                     </marker>
-                    <token negate="yes" regexp='yes'>horas?|[\.,!\?]
-                        <exception postag='CS'/>
+                    <token min='0' max='1' postag='RG'/>
+                    <token min='0' max='1' postag='D[AIP].+' postag_regexp='yes'/>
+                    <token postag='NC.+|AQ.+' postag_regexp='yes'>
+                        <exception regexp='yes'>horas?</exception>
+                        <exception postag='VMP.+|NP.+' postag_regexp='yes'/>
                     </token>
                 </pattern>
                 <message>&simplify_msg;</message>
                 <suggestion>serem</suggestion>
-                <suggestion>ser</suggestion>
-                <example correction="serem|ser">Mas depende sempre daquilo que consideras <marker>que são</marker> os problemas.</example>
+                <example correction="serem">Mas depende sempre daquilo que consideras <marker>que são</marker> os problemas.</example>
+                <example correction="serem">Para que o cérebro humano não detete <marker>que são</marker> simples imagens isoladas.</example>
+                <example correction="serem">Considero <marker>que são</marker> necessários mais recursos.</example>
+                <example correction="serem">Julgo <marker>que são</marker> excelentes investigadores.</example>
+                <example>Considero que são inteligentes e não precisam de ajuda.</example>
+                <example>Considero que são necessários e que devem permanecer aqui.</example>
+                <example>Penso que são nove horas da noite.</example>
+                <example>Penso que São Patrício utilizou esse símbolo.</example>
+                <example>Há muitos clientes que temos que são estudantes.</example>
+                <example>Diria que são os mais vendidos.</example>
+                <example>Considero que são os alunos que devem decidir.</example>
             </rule>
 
-            <!--
-      O edifício tem um grau de altura 5, que é também o mais alto da lista. → O edifício tem um grau de altura 5, sendo também o mais alto da lista.
-      -->
+            <!-- Copular sentence with explanatory relative clause (singular). -->
+            <!-- QUE É → sendo -->
             <rule>
-                <antipattern>
-                    <token>,</token>
-                    <token>que</token>
-                    <token regexp="yes">é|são</token>
-                    <token postag='NP.+' postag_regexp='yes'/>
-                    <token>,</token>
-                    <example>Imagem formada na rocha, que é Jesus, e ela sabe disso.</example>
-                </antipattern>
-                <antipattern>
-                    <token>,</token>
-                    <token>que</token>
-                    <token regexp="yes">é|são</token>
-                    <token>de</token>
-                    <token>,</token>
-                    <example>Imagem formada na rocha, que é Jesus, e ela sabe disso.</example>
-                </antipattern>
-                <antipattern>
-                    <token skip='-1'>que</token>
-                    <token>;</token>
-                    <token>que</token>
-                    <token regexp="yes">é|são</token>
-                    <token postag='VMP.+' postag_regexp='yes'/>
-                    <example>Diz que não fala muito; que é calado; que não se impõe.</example>
-                </antipattern>
-                <antipattern>
-                    <token postag='SENT_START'/>
-                    <token postag='D.+|AQ.+' postag_regexp='yes'/>
-                    <token postag='N.+' postag_regexp='yes'/>
-                    <token>,</token>
-                    <token>que</token>
-                    <token regexp="yes">é|são</token>
-                    <example>Os florais, que são nosso xodó, são reconhecidos de longe</example>
-                    <example>A obra, que é uma instalação do artista francês Frédéric Baron, diz “eu te amo” em quase todos os idiomas do mundo!</example>
-                </antipattern>
-                <antipattern>
-                    <token>,</token>
-                    <token postag='RG'/>
-                    <token>,</token>
-                    <token>que</token>
-                    <token regexp="yes">é|são</token>
-                    <example>Argumenta-se, entretanto, que são exatamente essas coisas que agora estão "mudando".</example>
-                </antipattern>
-                <antipattern>
-                    <token postag='SENT_START'/>
-                    <token postag='_PUNCT'/>
-                    <token>que</token>
-                    <token regexp="yes">é|são</token>
-                    <example>- Que é isto?</example>
-                </antipattern>
-                <antipattern>
-                    <token regexp='yes'>&vocativos;|&pronomes_retos;</token>
-                    <token>,</token>
-                    <token>que</token>
-                    <token regexp="yes">é|são</token>
-                    <example>O vestido era da minha avó, que é filha única.</example>
-                </antipattern>
-                <antipattern>
-                    <token postag='V.+' postag_regexp='yes'>
-                        <exception postag='NC.+|AQ.+' postag_regexp='yes'/>
-                    </token>
-                    <token min='0' max='1' postag='_PUNCT'/>
-                    <token>que</token>
-                    <token regexp="yes">é|são</token>
-                    <token postag='SPS00'/>
-                    <token postag='NC.+|AQ.+' postag_regexp='yes'/>
-                    <example>Vou anunciar, que é com enorme gosto que faço o trabalho.</example>
-                </antipattern>
                 <pattern>
-                    <token postag='_PUNCT'>
-                        <exception regexp='yes'>[«»“”"'‘’]</exception>
-                    </token>
+                    <token postag='SENT_START'/>
+                    <token postag='DA.+' postag_regexp='yes'/>
+                    <token postag='NC.S.+' postag_regexp='yes'/>
+                    <token postag='VMIP3S0'>é</token>
+                    <token postag='D[AIP].+' postag_regexp='yes'/>
+                    <token postag='NC.S.+' postag_regexp='yes'/>
+                    <token min='0' max='1' postag='AQ.+|VMP.+' postag_regexp='yes'/>
+                    <token>,</token>
                     <marker>
                         <token>que</token>
-                        <token regexp="yes">é|são</token>
+                        <token postag='VMIP3S0'>é</token>
                     </marker>
-                    <token negate="yes" regexp='yes'>horas?|[\.,!\?]
-                        <exception postag='CS|AQ.+' postag_regexp='yes'/>
-                    </token>
+                    <token>também</token>
+                    <token min='0' max='1' postag='D[AIP].+' postag_regexp='yes'/>
+                    <token postag='NC.+|AQ.+' postag_regexp='yes'/>
                 </pattern>
-                <message>&simplify_msg; Se preferir, pode também utilizar variações de &quot;o qual&quot;.</message>
+                <message>&simplify_msg;</message>
                 <suggestion>sendo</suggestion>
-                <suggestion>os quais são</suggestion>
-                <suggestion>as quais são</suggestion>
-                <suggestion>o qual é</suggestion>
-                <suggestion>a qual é</suggestion>
-                <example correction="sendo|os quais são|as quais são|o qual é|a qual é">O edifício tem um grau de altura 5, <marker>que é</marker> também o mais alto da lista.</example>
+                <example correction="sendo">O edifício é uma construção antiga, <marker>que é</marker> também um monumento nacional.</example>
+                <example correction="sendo">O programa é uma ferramenta informática, <marker>que é</marker> também gratuita.</example>
+                <example>A obra, que é uma instalação, diz muitas coisas.</example>
+                <example>O vestido era da minha avó, que é filha única.</example>
+                <example>Argumenta-se, entretanto, que é necessário mudar.</example>
+                <example>O edifício tem um grau de altura 5, que é também o mais alto da lista.</example>
+            </rule>
+
+            <!-- Copular sentence with explanatory relative clause (plural). -->
+            <!-- QUE SÃO → sendo -->
+            <rule>
+                <pattern>
+                    <token postag='SENT_START'/>
+                    <token postag='DA.+' postag_regexp='yes'/>
+                    <token postag='NC.P.+' postag_regexp='yes'/>
+                    <token postag='VMIP3P0'>são</token>
+                    <token min='0' max='1' postag='D[AIP].+' postag_regexp='yes'/>
+                    <token postag='NC.P.+' postag_regexp='yes'/>
+                    <token min='0' max='1' postag='AQ.+|VMP.+' postag_regexp='yes'/>
+                    <token>,</token>
+                    <marker>
+                        <token>que</token>
+                        <token case_sensitive='yes' postag='VMIP3P0'>são</token>
+                    </marker>
+                    <token>também</token>
+                    <token min='0' max='1' postag='D[AIP].+' postag_regexp='yes'/>
+                    <token postag='NC.+|AQ.+' postag_regexp='yes'/>
+                </pattern>
+                <message>&simplify_msg;</message>
+                <suggestion>sendo</suggestion>
+                <example correction="sendo">Os programas são ferramentas informáticas, <marker>que são</marker> também gratuitas.</example>
+                <example correction="sendo">Os edifícios são construções antigas, <marker>que são</marker> também monumentos nacionais.</example>
+                <example>Os florais, que são nosso xodó, são reconhecidos de longe.</example>
+                <example>O problema são as despesas, que são também elevadas.</example>
+                <example>Argumenta-se, entretanto, que são necessárias alterações.</example>
             </rule>
 
         </rulegroup>
